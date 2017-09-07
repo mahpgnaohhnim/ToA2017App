@@ -6,10 +6,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by henry on 04.09.17.
@@ -20,6 +18,7 @@ public class MainActivity extends Activity {
     LinearLayout contentContainer;
     Float totalSum;
     ItemLinearLayout adultItem, childItem;
+    SelectionDropDownLinearLayout generationDropDown, relationDropdown, originDropDown;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,10 +34,17 @@ public class MainActivity extends Activity {
         adultItem = new ItemLinearLayout(this, "Erwachsener", 4.5f);
         childItem = new ItemLinearLayout(this, "Kind", 1.5f);
         LinearLayout totalSum = (LinearLayout) View.inflate(this,R.layout.summary_value_linearlayout,null);
+        generationDropDown = new SelectionDropDownLinearLayout(this,"Altersgruppe", R.array.generationList);
+        relationDropdown = new SelectionDropDownLinearLayout(this, "Beziehung", R.array.beziehungList);
+        originDropDown = new SelectionDropDownLinearLayout(this, "Herkunft", R.array.originList);
 
         contentContainer.addView(adultItem);
         contentContainer.addView(childItem);
+        contentContainer.addView(generationDropDown);
+        contentContainer.addView(relationDropdown);
+        contentContainer.addView(originDropDown);
         contentContainer.addView(totalSum);
+
     }
 
     public void updateTotalSum(){
