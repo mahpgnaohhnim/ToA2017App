@@ -96,4 +96,8 @@ public class ItemLinearLayout extends LinearLayout {
         updateLabels();
     }
 
+    public String getCount(){
+        return Integer.toString(quantity);
+    }
+
 }

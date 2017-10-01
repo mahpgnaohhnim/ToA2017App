@@ -45,4 +45,8 @@ class SelectionDropDownLinearLayout extends LinearLayout {
     void reset(){
         dropDown.setSelection(0);
     }
+
+    String getVal(){
+        return dropDown.getSelectedItem().toString();
+    }
 }

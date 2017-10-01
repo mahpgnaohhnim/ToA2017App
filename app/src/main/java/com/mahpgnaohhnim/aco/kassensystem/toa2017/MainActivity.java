@@ -26,8 +26,9 @@ public class MainActivity extends Activity {
     Float totalSum;
     ItemLinearLayout adultItem, childItem;
     SelectionDropDownLinearLayout generationDropDown, relationDropdown, originDropDown;
-    Button scanBtn;
+    Button scanBtn, showCSVBtn, submitBtn;
     String barcodeResult;
+    CSVFileHandler fileHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,20 +40,22 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
+        fileHandler = new CSVFileHandler(this);
         contentContainer = (LinearLayout) findViewById(R.id.contentContainer);
         adultItem = new ItemLinearLayout(this, "Erwachsener", 5f);
         childItem = new ItemLinearLayout(this, "Kind", 2f);
-        LinearLayout totalSum = (LinearLayout) View.inflate(this,R.layout.summary_value_linearlayout,null);
+        LinearLayout totalSumLL = (LinearLayout) View.inflate(this,R.layout.summary_value_linearlayout,null);
         generationDropDown = new SelectionDropDownLinearLayout(this,"Altersgruppe", R.array.generationList);
         relationDropdown = new SelectionDropDownLinearLayout(this, "Beziehung", R.array.beziehungList);
         originDropDown = new SelectionDropDownLinearLayout(this, "Herkunft", R.array.originList);
+        totalSum = 0f;
 
         contentContainer.addView(adultItem);
         contentContainer.addView(childItem);
         contentContainer.addView(generationDropDown);
         contentContainer.addView(relationDropdown);
         contentContainer.addView(originDropDown);
-        contentContainer.addView(totalSum);
+        contentContainer.addView(totalSumLL);
 
         RelativeLayout root = (RelativeLayout) findViewById(R.id.mainRootView);
         LinearLayout footer = (LinearLayout) View.inflate(this, R.layout.footerbtns_linearlayout,null);
@@ -65,13 +68,12 @@ public class MainActivity extends Activity {
         root.addView(footer);
 
         scanBtn = (Button) findViewById(R.id.scanQRBtn);
-        scanBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent barCodeScannerIntent = new Intent(MainActivity.this, BarCodeScannerActivity.class);
-                startActivityForResult(barCodeScannerIntent, REQUEST_CODE);
-            }
-        });
+        submitBtn = (Button) findViewById(R.id.submitBtn);
+        showCSVBtn = (Button) findViewById(R.id.showCSVBtn);
+        scanBtn.setOnClickListener(myListener);
+        submitBtn.setOnClickListener(myListener);
+        showCSVBtn.setOnClickListener(myListener);
+
 
     }
 
@@ -91,6 +93,43 @@ public class MainActivity extends Activity {
         totalSum = adultSum + childSum;
     }
 
+
+    private void resetStats() {
+        adultItem.resetStats();
+        childItem.resetStats();
+        generationDropDown.reset();
+        relationDropdown.reset();
+        originDropDown.reset();
+        updateTotalSum();
+    }
+
+    private void onSubmit(){
+        if(totalSum != 0.0){
+            String entry = getCurrentEntry();
+            fileHandler.writeFile(entry);
+            Toast.makeText(getApplicationContext(),"Submit", Toast.LENGTH_LONG).show();
+            resetStats();
+        }
+        else{
+            Toast.makeText(getApplicationContext(),"Summe ist 0!", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private String getCurrentEntry(){
+        String currentEntry = "";
+            currentEntry += childItem.getCount();
+            currentEntry += adultItem.getCount();
+            currentEntry += generationDropDown.getVal();
+            currentEntry += relationDropdown.getVal();
+            currentEntry += originDropDown.getVal();
+            currentEntry += totalSum;
+
+
+        return currentEntry;
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode==REQUEST_CODE && resultCode == RESULT_OK){
@@ -103,5 +142,30 @@ public class MainActivity extends Activity {
         }
 
     }
+
+    View.OnClickListener myListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.showCSVBtn:
+                    Toast.makeText(getApplicationContext(),"CSV", Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.submitBtn:
+                    onSubmit();
+                    resetStats();
+                    break;
+
+                case R.id.scanQRBtn:
+                    Intent barCodeScannerIntent = new Intent(MainActivity.this, BarCodeScannerActivity.class);
+                    startActivityForResult(barCodeScannerIntent, REQUEST_CODE);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    };
+
 
 }
