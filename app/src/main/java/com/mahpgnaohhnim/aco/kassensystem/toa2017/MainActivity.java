@@ -47,18 +47,22 @@ public class MainActivity extends Activity {
         relationDropdown = new SelectionDropDownLinearLayout(this, "Beziehung", R.array.beziehungList);
         originDropDown = new SelectionDropDownLinearLayout(this, "Herkunft", R.array.originList);
 
-        LinearLayout footer = (LinearLayout) View.inflate(this, R.layout.footerbtns_linearlayout,null);
-        RelativeLayout.LayoutParams footerParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        footer.setLayoutParams(footerParam);
-
         contentContainer.addView(adultItem);
         contentContainer.addView(childItem);
         contentContainer.addView(generationDropDown);
         contentContainer.addView(relationDropdown);
         contentContainer.addView(originDropDown);
         contentContainer.addView(totalSum);
-        contentContainer.addView(footer);
+
+        RelativeLayout root = (RelativeLayout) findViewById(R.id.mainRootView);
+        LinearLayout footer = (LinearLayout) View.inflate(this, R.layout.footerbtns_linearlayout,null);
+        RelativeLayout.LayoutParams footerParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        footerParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        footerParam.bottomMargin = 2;
+        footer.setLayoutParams(footerParam);
+
+
+        root.addView(footer);
 
         scanBtn = (Button) findViewById(R.id.scanQRBtn);
         scanBtn.setOnClickListener(new View.OnClickListener() {
