@@ -16,13 +16,13 @@ public class ItemLinearLayout extends LinearLayout {
     String itemName;
     TextView nameLabel, quantityLabel;
     int quantity;
-    Float sellPrice;
+    int sellPrice;
     final Button subBtn, addBtn;
     MainActivity mainActivity;
     LinearLayout rightContainer;
 
 
-    public ItemLinearLayout(final Context context, String name, final Float price){
+    public ItemLinearLayout(final Context context, String name, final int price){
         super(context);
         mainActivity = (MainActivity) context;
 

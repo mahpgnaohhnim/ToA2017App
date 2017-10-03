@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
 
     public static final int REQUEST_CODE = 100;
     LinearLayout contentContainer;
-    Float totalSum;
+    int totalSum;
     ItemLinearLayout adultItem, childItem;
     SelectionDropDownLinearLayout generationDropDown, relationDropdown, originDropDown;
     Button scanBtn, showCSVBtn, submitBtn;
@@ -42,13 +42,13 @@ public class MainActivity extends Activity {
 
         fileHandler = new CSVFileHandler(this);
         contentContainer = (LinearLayout) findViewById(R.id.contentContainer);
-        adultItem = new ItemLinearLayout(this, "Erwachsener", 5f);
-        childItem = new ItemLinearLayout(this, "Kind", 2f);
+        adultItem = new ItemLinearLayout(this, "Erwachsener", 6);
+        childItem = new ItemLinearLayout(this, "Kind", 3);
         LinearLayout totalSumLL = (LinearLayout) View.inflate(this,R.layout.summary_value_linearlayout,null);
         generationDropDown = new SelectionDropDownLinearLayout(this,"Altersgruppe", R.array.generationList);
         relationDropdown = new SelectionDropDownLinearLayout(this, "Beziehung", R.array.beziehungList);
         originDropDown = new SelectionDropDownLinearLayout(this, "Herkunft", R.array.originList);
-        totalSum = 0f;
+        totalSum = 0;
 
         contentContainer.addView(adultItem);
         contentContainer.addView(childItem);
@@ -88,8 +88,8 @@ public class MainActivity extends Activity {
     }
 
     private void calcTotalSum(){
-        Float adultSum = adultItem.sellPrice * adultItem.quantity;
-        Float childSum = childItem.sellPrice * childItem.quantity;
+        int adultSum = adultItem.sellPrice * adultItem.quantity;
+        int childSum = childItem.sellPrice * childItem.quantity;
         totalSum = adultSum + childSum;
     }
 
