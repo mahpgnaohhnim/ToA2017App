@@ -118,12 +118,12 @@ public class MainActivity extends Activity {
 
     private String getCurrentEntry(){
         String currentEntry = "";
-            currentEntry += childItem.getCount();
-            currentEntry += adultItem.getCount();
-            currentEntry += generationDropDown.getVal();
-            currentEntry += relationDropdown.getVal();
-            currentEntry += originDropDown.getVal();
-            currentEntry += totalSum;
+            currentEntry += childItem.getCount()+";";
+            currentEntry += adultItem.getCount()+";";
+            currentEntry += generationDropDown.getVal()+";";
+            currentEntry += relationDropdown.getVal()+";";
+            currentEntry += originDropDown.getVal()+";";
+            currentEntry += totalSum+";";
 
 
         return currentEntry;
@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.showCSVBtn:
-                    Toast.makeText(getApplicationContext(),"CSV", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(MainActivity.this, CSVViewerActivity.class));
                     break;
 
                 case R.id.submitBtn:

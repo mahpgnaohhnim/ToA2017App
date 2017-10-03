@@ -23,7 +23,7 @@ class CSVFileHandler {
 
     String header ="Kind;" +
             "Erwachsener;"+
-            "Altersgruppe"+
+            "Altersgruppe;"+
             "Beziehung;"+
             "Herkunft;"+
             "GesamtPreis;"+
@@ -43,7 +43,7 @@ class CSVFileHandler {
     public void writeFile(String input){
         String content = input;
         String timeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
-        content += timeStamp+"\n";
+        content += timeStamp+";\n";
 
         try {
 
@@ -72,7 +72,7 @@ class CSVFileHandler {
             BufferedReader inputStream = new BufferedReader(new FileReader(file));
             String readData;
             while((readData = inputStream.readLine()) != null){
-                readData = readData.replace(";", "|");
+                //readData = readData.replace(";", "|");
                 arrList.add(readData);
             }
 
@@ -86,9 +86,9 @@ class CSVFileHandler {
 
     public void rewriteFile(ArrayList<String> list){
         String content = "";
-        for(String listItem :list){
+        /*for(String listItem :list){
             content += listItem.replace("|",";")+"\n";
-        }
+        }*/
 
         try {
             File path = context.getExternalFilesDir(null);
