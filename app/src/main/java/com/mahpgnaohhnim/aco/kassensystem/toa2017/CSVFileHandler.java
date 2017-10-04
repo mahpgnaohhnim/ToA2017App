@@ -26,6 +26,7 @@ class CSVFileHandler {
             "Altersgruppe;"+
             "Beziehung;"+
             "Herkunft;"+
+            "Postleitzahl;"+
             "GesamtPreis;"+
             "Datum;\n";
 
@@ -63,16 +64,17 @@ class CSVFileHandler {
 
     }
 
-    public ArrayList<String> getCSVArrList(){
-        ArrayList<String> arrList = new ArrayList<>();
+    public ArrayList<String[]> getCSVArrList(){
+        ArrayList<String[]> arrList = new ArrayList<>();
         File path = context.getExternalFilesDir(null);
         File file = new File(path, fileName);
         try{
 
             BufferedReader inputStream = new BufferedReader(new FileReader(file));
-            String readData;
-            while((readData = inputStream.readLine()) != null){
+            String line;
+            while((line = inputStream.readLine()) != null){
                 //readData = readData.replace(";", "|");
+                String[] readData = line.split(";");
                 arrList.add(readData);
             }
 
@@ -84,11 +86,15 @@ class CSVFileHandler {
     }
 
 
-    public void rewriteFile(ArrayList<String> list){
+    public void rewriteFile(ArrayList<String[]> list){
         String content = "";
-        /*for(String listItem :list){
-            content += listItem.replace("|",";")+"\n";
-        }*/
+        for(String[] listItem :list){
+            //content += listItem.replace("|",";")+"\n";
+            for(String item :listItem){
+                content += item+";";
+            }
+            content += "\n";
+        }
 
         try {
             File path = context.getExternalFilesDir(null);

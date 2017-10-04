@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class MainActivity extends Activity {
     int totalSum;
     ItemLinearLayout adultItem, childItem;
     SelectionDropDownLinearLayout generationDropDown, relationDropdown, originDropDown;
+    EditText editPlz;
     Button scanBtn, showCSVBtn, submitBtn;
     String barcodeResult;
     CSVFileHandler fileHandler;
@@ -45,9 +47,11 @@ public class MainActivity extends Activity {
         adultItem = new ItemLinearLayout(this, "Erwachsener", 6);
         childItem = new ItemLinearLayout(this, "Kind", 3);
         LinearLayout totalSumLL = (LinearLayout) View.inflate(this,R.layout.summary_value_linearlayout,null);
+        LinearLayout plzLL = (LinearLayout) View.inflate(this, R.layout.plz_linear_layout, null);
         generationDropDown = new SelectionDropDownLinearLayout(this,"Altersgruppe", R.array.generationList);
         relationDropdown = new SelectionDropDownLinearLayout(this, "Beziehung", R.array.beziehungList);
         originDropDown = new SelectionDropDownLinearLayout(this, "Herkunft", R.array.originList);
+
         totalSum = 0;
 
         contentContainer.addView(adultItem);
@@ -55,6 +59,7 @@ public class MainActivity extends Activity {
         contentContainer.addView(generationDropDown);
         contentContainer.addView(relationDropdown);
         contentContainer.addView(originDropDown);
+        contentContainer.addView(plzLL);
         contentContainer.addView(totalSumLL);
 
         RelativeLayout root = (RelativeLayout) findViewById(R.id.mainRootView);
@@ -67,6 +72,7 @@ public class MainActivity extends Activity {
 
         root.addView(footer);
 
+        editPlz = (EditText) findViewById(R.id.editPlz);
         scanBtn = (Button) findViewById(R.id.scanQRBtn);
         submitBtn = (Button) findViewById(R.id.submitBtn);
         showCSVBtn = (Button) findViewById(R.id.showCSVBtn);
@@ -83,7 +89,7 @@ public class MainActivity extends Activity {
         if(totalSum == 0){
             totalSumLabel.setText("0€");
         }else {
-            totalSumLabel.setText(Float.toString(totalSum) + "€");
+            totalSumLabel.setText(totalSum + "€");
         }
     }
 
@@ -104,7 +110,7 @@ public class MainActivity extends Activity {
     }
 
     private void onSubmit(){
-        if(totalSum != 0.0){
+        if(totalSum != 0){
             String entry = getCurrentEntry();
             fileHandler.writeFile(entry);
             Toast.makeText(getApplicationContext(),"Submit", Toast.LENGTH_LONG).show();
@@ -123,6 +129,7 @@ public class MainActivity extends Activity {
             currentEntry += generationDropDown.getVal()+";";
             currentEntry += relationDropdown.getVal()+";";
             currentEntry += originDropDown.getVal()+";";
+            currentEntry += editPlz.getText()+";";
             currentEntry += totalSum+";";
 
 

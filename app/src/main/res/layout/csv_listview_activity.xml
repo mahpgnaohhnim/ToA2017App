@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical" android:layout_width="match_parent"
 android:layout_height="match_parent">
 
@@ -7,22 +7,20 @@ android:layout_height="match_parent">
 <ListView
     android:id="@+id/csvListView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_alignParentStart="true"
-    android:layout_weight="1" />
+    android:layout_height="0dp"
+    android:layout_weight="0.9"/>
 
 <LinearLayout
     android:id="@+id/listViewNav"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
+    android:layout_height="0dp"
     android:orientation="horizontal"
-    >
+    android:layout_weight="0.1">
 
     <Button
         android:id="@+id/backBtn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="#53A1E8"
         android:text="zuruck" />
@@ -30,7 +28,7 @@ android:layout_height="match_parent">
     <Button
         android:id="@+id/deleteBtn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="#FF4900"
         android:text="Delete" />
@@ -38,9 +36,9 @@ android:layout_height="match_parent">
     <Button
         android:id="@+id/shareBtn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="Share" />
 </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -21,8 +21,8 @@ public class CSVViewerActivity extends Activity {
 
     CSVFileHandler csvHandler;
     ListView csvListView;
-    ArrayList<String> entryArrList;
-    ArrayAdapter adapter;
+    ArrayList<String[]> entryArrList;
+    CSVListAdapter adapter;
     int selectedItemIndex;
 
 
@@ -88,7 +88,7 @@ public class CSVViewerActivity extends Activity {
 
     private void updateList(){
         entryArrList = csvHandler.getCSVArrList();
-        adapter = new ArrayAdapter<String>(this, R.layout.csv_listview_activity, entryArrList);
+        adapter = new CSVListAdapter(this, R.layout.csv_list_item_linearlayout,entryArrList);
         csvListView.setAdapter(adapter);
     }
 
