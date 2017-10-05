@@ -41,4 +41,12 @@ class SelectionDropDownLinearLayout extends LinearLayout {
         this.addView(nameLabel);
         this.addView(dropDown);
     }
+
+    void reset(){
+        dropDown.setSelection(0);
+    }
+
+    String getVal(){
+        return dropDown.getSelectedItem().toString();
+    }
 }
