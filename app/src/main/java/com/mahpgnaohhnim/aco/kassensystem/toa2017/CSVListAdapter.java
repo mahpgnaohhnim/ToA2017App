@@ -34,6 +34,7 @@ class CSVListAdapter extends ArrayAdapter<String[]> {
         TextView txtOrigin;
         TextView txtPlz;
         TextView txtSum;
+        TextView txtBarcode;
         TextView txtDate;
     }
 
@@ -50,6 +51,7 @@ class CSVListAdapter extends ArrayAdapter<String[]> {
             viewHolder.txtOrigin = (TextView) rowView.findViewById(R.id.csvItemTxtOrigin);
             viewHolder.txtPlz = (TextView) rowView.findViewById(R.id.csvItemTxtPlz);
             viewHolder.txtSum = (TextView) rowView.findViewById(R.id.csvItemTxtSum);
+            viewHolder.txtBarcode = (TextView) rowView.findViewById(R.id.csvItemTxtBarcode);
             viewHolder.txtDate = (TextView) rowView.findViewById(R.id.csvItemTxtDate);
             rowView.setTag(viewHolder);
         }
@@ -63,8 +65,9 @@ class CSVListAdapter extends ArrayAdapter<String[]> {
         holder.txtRelation.setText(row[3]);
         holder.txtOrigin.setText(row[4]);
         holder.txtPlz.setText(row[5]);
-        holder.txtSum.setText(row[6]);
-        holder.txtDate.setText(row[7]);
+        holder.txtBarcode.setText(row[6]);
+        holder.txtSum.setText(row[7]);
+        holder.txtDate.setText(row[8]);
 
         return rowView;
     }

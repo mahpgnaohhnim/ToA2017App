@@ -21,12 +21,14 @@ import java.lang.String;
 
 class CSVFileHandler {
 
-    String header ="Kind;" +
+    String header = ""+
+            "Kind;" +
             "Erwachsener;"+
             "Altersgruppe;"+
             "Beziehung;"+
             "Herkunft;"+
             "Postleitzahl;"+
+            "Barcode;"+
             "GesamtPreis;"+
             "Datum;\n";
 

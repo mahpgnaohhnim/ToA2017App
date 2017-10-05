@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.vision.barcode.Barcode;
 
+import java.util.ArrayList;
+
 /**
  * Created by henry on 04.09.17.
  */
@@ -46,9 +48,9 @@ public class MainActivity extends Activity {
         contentContainer = (LinearLayout) findViewById(R.id.contentContainer);
         adultItem = new ItemLinearLayout(this, "Erwachsener", 6);
         childItem = new ItemLinearLayout(this, "Kind", 3);
-        LinearLayout totalSumLL = (LinearLayout) View.inflate(this,R.layout.summary_value_linearlayout,null);
+        LinearLayout totalSumLL = (LinearLayout) View.inflate(this, R.layout.summary_value_linearlayout, null);
         LinearLayout plzLL = (LinearLayout) View.inflate(this, R.layout.plz_linear_layout, null);
-        generationDropDown = new SelectionDropDownLinearLayout(this,"Altersgruppe", R.array.generationList);
+        generationDropDown = new SelectionDropDownLinearLayout(this, "Altersgruppe", R.array.generationList);
         relationDropdown = new SelectionDropDownLinearLayout(this, "Beziehung", R.array.beziehungList);
         originDropDown = new SelectionDropDownLinearLayout(this, "Herkunft", R.array.originList);
 
@@ -63,7 +65,7 @@ public class MainActivity extends Activity {
         contentContainer.addView(totalSumLL);
 
         RelativeLayout root = (RelativeLayout) findViewById(R.id.mainRootView);
-        LinearLayout footer = (LinearLayout) View.inflate(this, R.layout.footerbtns_linearlayout,null);
+        LinearLayout footer = (LinearLayout) View.inflate(this, R.layout.footerbtns_linearlayout, null);
         RelativeLayout.LayoutParams footerParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         footerParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         footerParam.bottomMargin = 2;
@@ -83,17 +85,17 @@ public class MainActivity extends Activity {
 
     }
 
-    public void updateTotalSum(){
+    public void updateTotalSum() {
         calcTotalSum();
         TextView totalSumLabel = (TextView) findViewById(R.id.totalSum);
-        if(totalSum == 0){
+        if (totalSum == 0) {
             totalSumLabel.setText("0€");
-        }else {
+        } else {
             totalSumLabel.setText(totalSum + "€");
         }
     }
 
-    private void calcTotalSum(){
+    private void calcTotalSum() {
         int adultSum = adultItem.sellPrice * adultItem.quantity;
         int childSum = childItem.sellPrice * childItem.quantity;
         totalSum = adultSum + childSum;
@@ -107,44 +109,45 @@ public class MainActivity extends Activity {
         relationDropdown.reset();
         originDropDown.reset();
         updateTotalSum();
+        editPlz.setText("");
     }
 
-    private void onSubmit(){
-        if(totalSum != 0){
+    private void onSubmit() {
+        if (totalSum != 0) {
             String entry = getCurrentEntry();
             fileHandler.writeFile(entry);
-            Toast.makeText(getApplicationContext(),"Submit", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Submit", Toast.LENGTH_LONG).show();
             resetStats();
-        }
-        else{
-            Toast.makeText(getApplicationContext(),"Summe ist 0!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Summe ist 0!", Toast.LENGTH_LONG).show();
         }
 
     }
 
-    private String getCurrentEntry(){
+    private String getCurrentEntry() {
         String currentEntry = "";
-            currentEntry += childItem.getCount()+";";
-            currentEntry += adultItem.getCount()+";";
-            currentEntry += generationDropDown.getVal()+";";
-            currentEntry += relationDropdown.getVal()+";";
-            currentEntry += originDropDown.getVal()+";";
-            currentEntry += editPlz.getText()+";";
-            currentEntry += totalSum+";";
-
+        currentEntry += childItem.getCount() + ";";
+        currentEntry += adultItem.getCount() + ";";
+        currentEntry += generationDropDown.getVal() + ";";
+        currentEntry += relationDropdown.getVal() + ";";
+        currentEntry += originDropDown.getVal() + ";";
+        currentEntry += editPlz.getText() + ";";
+        //Barcode ist leer
+        currentEntry += ";";
+        currentEntry += totalSum + ";";
 
         return currentEntry;
     }
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode==REQUEST_CODE && resultCode == RESULT_OK){
-            if(data != null){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
                 Barcode barcode = data.getParcelableExtra("barcode");
                 barcodeResult = barcode.rawValue;
-                Toast.makeText(getApplicationContext(),barcodeResult, Toast.LENGTH_LONG).show();
-
+                //Toast.makeText(getApplicationContext(),barcodeResult, Toast.LENGTH_LONG).show();
+                onBarcodeScan(barcodeResult);
             }
         }
 
@@ -153,7 +156,7 @@ public class MainActivity extends Activity {
     View.OnClickListener myListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.showCSVBtn:
                     startActivity(new Intent(MainActivity.this, CSVViewerActivity.class));
                     break;
@@ -173,6 +176,39 @@ public class MainActivity extends Activity {
             }
         }
     };
+
+    private void onBarcodeScan(String barCode) {
+        boolean isValid = checkBarCode(barCode);
+        if (isValid) {
+            //Adult and Child should empty
+            String entry =";;";
+            entry += generationDropDown.getVal() + ";";
+            entry += relationDropdown.getVal() + ";";
+            entry += originDropDown.getVal() + ";";
+            entry += editPlz.getText() + ";";
+            entry += barCode+";";
+            //pricesum should empty
+            entry += ";";
+            fileHandler.writeFile(entry);
+            Toast.makeText(getApplicationContext(), "Barcode Valid :D", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Already Scanned :(((", Toast.LENGTH_LONG).show();
+
+        }
+
+    }
+
+    private boolean checkBarCode(String barCode) {
+        boolean isValid = true;
+        ArrayList<String[]> csvList = fileHandler.getCSVArrList();
+        for (String[] entry : csvList) {
+            if (barCode.equals(entry[entry.length-3])) {
+                isValid = false;
+            }
+        }
+
+        return isValid;
+    }
 
 
 }

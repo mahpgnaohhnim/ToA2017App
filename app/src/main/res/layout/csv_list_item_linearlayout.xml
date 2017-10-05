@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
+
     <TextView
         android:id="@+id/csvItemTxtAdult"
         android:layout_width="0dp"
@@ -51,6 +52,15 @@
     </TextView>
     <TextView
         android:id="@+id/csvItemTxtPlz"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_height="wrap_content"
+        android:padding="5sp"
+        android:textStyle="bold"
+        android:textSize="12sp">
+    </TextView>
+    <TextView
+        android:id="@+id/csvItemTxtBarcode"
         android:layout_width="0dp"
         android:layout_weight="0.2"
         android:layout_height="wrap_content"
